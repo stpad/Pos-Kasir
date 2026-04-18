@@ -1,5 +1,3 @@
----
-
 # 📘 Setup Project POS Kasir (Laravel + MySQL)
 
 ## 1. Clone Repository
