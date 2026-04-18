@@ -1,5 +1,3 @@
-Berikut tata cara setup yang rapi dan bisa langsung kamu pakai untuk dokumentasi tim.
-
 ---
 
 # 📘 Setup Project POS Kasir (Laravel + MySQL)
