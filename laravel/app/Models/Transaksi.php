@@ -14,11 +14,6 @@ class Transaksi extends Model
         'tanggal',
     ];
 
-    public function produk()
-    {
-        return $this->belongsTo(Produk::class);
-    }
-
     public function details()
     {
         return $this->hasMany(TransaksiDetail::class);
