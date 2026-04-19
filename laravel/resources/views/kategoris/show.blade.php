@@ -1,22 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Kategori</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Detail Kategori</h1>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ $kategori->nama }}</h5>
-                <p class="card-text">{{ $kategori->deskripsi }}</p>
-                <p class="card-text"><small class="text-muted">Dibuat pada: {{ $kategori->created_at }}</small></p>
-            </div>
-        </div>
-        <a href="{{ route('kategoris.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+@extends('layouts.app')
+
+@section('content')
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Detail Kategori</h1>
+    <div class="bg-white p-6 rounded shadow-md mb-6">
+        <h2 class="text-2xl font-bold mb-4">{{ $kategori->nama }}</h2>
+        <p class="mb-2">{{ $kategori->deskripsi ?: 'Tidak ada deskripsi' }}</p>
+        <p class="text-sm text-gray-500">Dibuat pada: {{ $kategori->created_at->format('d M Y') }}</p>
     </div>
-</body>
-</html>
+
+    <h2 class="text-2xl font-bold mb-4">Produk dalam Kategori Ini</h2>
+    @if($kategori->produks->count() > 0)
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b">Nama Produk</th>
+                        <th class="py-2 px-4 border-b">Harga Beli</th>
+                        <th class="py-2 px-4 border-b">Harga Jual</th>
+                        <th class="py-2 px-4 border-b">Stok</th>
+                        <th class="py-2 px-4 border-b">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($kategori->produks as $produk)
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 border-b">{{ $produk->nama }}</td>
+                        <td class="py-2 px-4 border-b">Rp {{ number_format($produk->harga_beli, 0, ',', '.') }}</td>
+                        <td class="py-2 px-4 border-b">Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
+                        <td class="py-2 px-4 border-b">{{ $produk->stok }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <a href="{{ route('produks.show', $produk->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">Lihat</a>
+                            <a href="{{ route('produks.edit', $produk->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <p class="text-gray-500">Belum ada produk dalam kategori ini.</p>
+    @endif
+
+    <div class="mt-6">
+        <a href="{{ route('kategoris.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Kembali</a>
+        <a href="{{ route('produks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">Tambah Produk</a>
+    </div>
+</div>
+@endsection
