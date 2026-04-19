@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-
-Route::get('/cek-db', function () {
-    return DB::connection()->getDatabaseName();
-});
+use App\Http\Controllers\KategoriController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('kategoris', KategoriController::class);
