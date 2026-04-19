@@ -1,28 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Kategori</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Edit Kategori</h1>
-        <form action="{{ route('kategoris.update', $kategori) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{ $kategori->nama }}" required>
-            </div>
-            <div class="mb-3">
-                <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $kategori->deskripsi }}</textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Perbarui</button>
-            <a href="{{ route('kategoris.index') }}" class="btn btn-secondary">Kembali</a>
-        </form>
-    </div>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('content')
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Edit Kategori</h1>
+    <form action="{{ route('kategoris.update', $kategori->id) }}" method="POST" class="bg-white p-6 rounded shadow-md">
+        @csrf
+        @method('PUT')
+        <div class="mb-4">
+            <label for="nama" class="block text-gray-700 text-sm font-bold mb-2">Nama Kategori</label>
+            <input type="text" name="nama" id="nama" value="{{ old('nama', $kategori->nama) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            @error('nama')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
+        </div>
+        <div class="mb-4">
+            <label for="deskripsi" class="block text-gray-700 text-sm font-bold mb-2">Deskripsi</label>
+            <textarea name="deskripsi" id="deskripsi" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('deskripsi', $kategori->deskripsi) }}</textarea>
+            @error('deskripsi')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update</button>
+            <a href="{{ route('kategoris.index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Kembali</a>
+        </div>
+    </form>
+</div>
+@endsection
