@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -12,8 +13,10 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategoris = Kategori::all();
-        return view('kategoris.index', compact('kategoris'));
+        $kategoris = Kategori::withCount('produks')->get();
+        $lowStockCount = Produk::where('stok_awal', '<=', 5)->count();
+
+        return view('kategoris.index', compact('kategoris', 'lowStockCount'));
     }
 
     /**
@@ -44,7 +47,10 @@ class KategoriController extends Controller
      */
     public function show(Kategori $kategori)
     {
-        return view('kategoris.show', compact('kategori'));
+        $kategori->load('produks');
+        $lowStockProducts = $kategori->produks->filter(fn ($produk) => $produk->stok_awal <= 5);
+
+        return view('kategoris.show', compact('kategori', 'lowStockProducts'));
     }
 
     /**

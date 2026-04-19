@@ -1,27 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Kategori</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Tambah Kategori</h1>
-        <form action="{{ route('kategoris.store') }}" method="POST">
+﻿@extends('layouts.app')
+
+@section('content')
+    <div class="space-y-6">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-900">Tambah Kategori</h1>
+                <p class="mt-1 text-sm text-slate-600">Buat kategori baru untuk mengorganisir produk.</p>
+            </div>
+            <a href="{{ route('kategoris.index') }}" class="inline-flex items-center rounded-md bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200">Kembali ke Kategori</a>
+        </div>
+
+        @if ($errors->any())
+            <div class="rounded-3xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
+                <ul class="list-disc space-y-1 pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('kategoris.store') }}" method="POST" class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             @csrf
-            <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" required>
+
+            <div>
+                <label for="nama" class="block text-sm font-medium text-slate-700">Nama</label>
+                <input id="nama" name="nama" value="{{ old('nama') }}" required class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100" />
             </div>
-            <div class="mb-3">
-                <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+
+            <div>
+                <label for="deskripsi" class="block text-sm font-medium text-slate-700">Deskripsi</label>
+                <textarea id="deskripsi" name="deskripsi" rows="4" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">{{ old('deskripsi') }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="{{ route('kategoris.index') }}" class="btn btn-secondary">Kembali</a>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white hover:bg-sky-700">Simpan Kategori</button>
+                <a href="{{ route('kategoris.index') }}" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
+            </div>
         </form>
     </div>
-</body>
-</html>
+@endsection
