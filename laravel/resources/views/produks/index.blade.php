@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-min-full px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Produk</h2>
             <a href="{{ route('produks.create') }}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium">
@@ -23,10 +23,9 @@
                         <p class="text-gray-600">Belum ada produk.</p>
                     </div>
                 @else
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
@@ -37,7 +36,6 @@
                         <tbody class="divide-y divide-gray-200">
                             @foreach($produks as $produk)
                                 <tr>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $produk->id }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $produk->nama }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $produk->stok }}</td>
