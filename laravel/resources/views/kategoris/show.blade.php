@@ -1,22 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Kategori</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Detail Kategori</h1>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ $kategori->nama }}</h5>
-                <p class="card-text">{{ $kategori->deskripsi }}</p>
-                <p class="card-text"><small class="text-muted">Dibuat pada: {{ $kategori->created_at }}</small></p>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Detail Kategori') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <x-input-label :value="__('Nama')" />
+                            <div class="mt-1 text-sm text-gray-900">{{ $kategori->nama }}</div>
+                        </div>
+
+                        <div>
+                            <x-input-label :value="__('Deskripsi')" />
+                            <div class="mt-1 text-sm text-gray-900">{{ $kategori->deskripsi ?? '-' }}</div>
+                        </div>
+
+                        <div>
+                            <x-input-label :value="__('Dibuat pada')" />
+                            <div class="mt-1 text-sm text-gray-500">{{ $kategori->created_at->format('d M Y H:i') }}</div>
+                        </div>
+
+                        <div>
+                            <x-input-label :value="__('Terakhir diperbarui')" />
+                            <div class="mt-1 text-sm text-gray-500">{{ $kategori->updated_at->format('d M Y H:i') }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex items-center gap-4">
+                        @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('kategoris.edit', $kategori) }}" class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 focus:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('Edit') }}
+                        </a>
+                        @endif
+                        <a href="{{ route('kategoris.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('Kembali') }}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-        <a href="{{ route('kategoris.index') }}" class="btn btn-secondary mt-3">Kembali</a>
     </div>
-</body>
-</html>
+</x-app-layout>

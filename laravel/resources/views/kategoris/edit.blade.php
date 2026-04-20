@@ -1,28 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Kategori</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Edit Kategori</h1>
-        <form action="{{ route('kategoris.update', $kategori) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{ $kategori->nama }}" required>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Kategori') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <form action="{{ route('kategoris.update', $kategori) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-6">
+                            <x-input-label for="nama" :value="__('Nama')" />
+                            <x-text-input id="nama" name="nama" type="text" class="mt-1 block w-full" :value="old('nama', $kategori->nama)" required autofocus />
+                            <x-input-error class="mt-2" :messages="$errors->get('nama')" />
+                        </div>
+
+                        <div class="mb-6">
+                            <x-input-label for="deskripsi" :value="__('Deskripsi')" />
+                            <textarea id="deskripsi" name="deskripsi" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('deskripsi', $kategori->deskripsi) }}</textarea>
+                            <x-input-error class="mt-2" :messages="$errors->get('deskripsi')" />
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <x-primary-button>{{ __('Perbarui') }}</x-primary-button>
+                            <a href="{{ route('kategoris.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('Kembali') }}
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $kategori->deskripsi }}</textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Perbarui</button>
-            <a href="{{ route('kategoris.index') }}" class="btn btn-secondary">Kembali</a>
-        </form>
+        </div>
     </div>
-</body>
-</html>
+</x-app-layout>
