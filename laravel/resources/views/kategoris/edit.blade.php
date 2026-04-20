@@ -1,39 +1,44 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Kategori') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form action="{{ route('kategoris.update', $kategori) }}" method="POST">
-                        @csrf
-                        @method('PUT')
+@section('content')
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="mb-6">
+            <a href="{{ route('kategoris.index') }}" class="text-gray-600 hover:text-gray-800">← Kembali</a>
+        </div>
 
-                        <div class="mb-6">
-                            <x-input-label for="nama" :value="__('Nama')" />
-                            <x-text-input id="nama" name="nama" type="text" class="mt-1 block w-full" :value="old('nama', $kategori->nama)" required autofocus />
-                            <x-input-error class="mt-2" :messages="$errors->get('nama')" />
-                        </div>
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Edit Kategori</h2>
 
-                        <div class="mb-6">
-                            <x-input-label for="deskripsi" :value="__('Deskripsi')" />
-                            <textarea id="deskripsi" name="deskripsi" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('deskripsi', $kategori->deskripsi) }}</textarea>
-                            <x-input-error class="mt-2" :messages="$errors->get('deskripsi')" />
-                        </div>
+                <form action="{{ route('kategoris.update', $kategori) }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                        <div class="flex items-center gap-4">
-                            <x-primary-button>{{ __('Perbarui') }}</x-primary-button>
-                            <a href="{{ route('kategoris.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                {{ __('Kembali') }}
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                        <input type="text" name="nama" value="{{ old('nama', $kategori->nama) }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500" required>
+                        @error('nama')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                        <textarea name="deskripsi" rows="4" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500">{{ old('deskripsi', $kategori->deskripsi) }}</textarea>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button type="submit" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            Perbarui
+                        </button>
+                        <a href="{{ route('kategoris.index') }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50">
+                            Kembali
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

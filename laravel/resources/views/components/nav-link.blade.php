@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-@props(['active'])
-=======
 @props(['active' => false])
->>>>>>> crud-user
 
 @php
 $classes = ($active ?? false)
@@ -12,8 +8,4 @@ $classes = ($active ?? false)
 
 <a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
-<<<<<<< HEAD
 </a>
-=======
-</a>
->>>>>>> crud-user

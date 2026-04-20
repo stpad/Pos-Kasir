@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <section class="space-y-6">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -54,10 +53,6 @@
         </form>
     </x-modal>
 </section>
-=======
-<form method="POST" action="{{ route('profile.destroy') }}" class="p-6">
-    @csrf
-    @method('delete')
 
     <h2 class="text-lg font-medium text-gray-900">
         Delete Account
