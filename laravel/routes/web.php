@@ -1,29 +1,37 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route untuk setiap role
-Route::get('/admin/dashboard', function () {
-    return view('dashboard.admin');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::get('/cashier/dashboard', function () {
-    return view('dashboard.cashier');
-})->middleware(['auth', 'verified'])->name('cashier.dashboard');
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard.admin');
+    })->name('admin.dashboard');
 
-// Default dashboard (redirect based on role)
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
-    return redirect()->route('cashier.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/cashier/dashboard', function () {
+        return view('dashboard.cashier');
+    })->name('cashier.dashboard');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::resource('kategoris', KategoriController::class)
+        ->middleware('role:admin');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,3 +40,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
