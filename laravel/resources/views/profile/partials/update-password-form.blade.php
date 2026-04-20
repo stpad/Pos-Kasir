@@ -46,3 +46,13 @@
         </div>
     </form>
 </section>
+
+    <div class="flex items-center gap-4">
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Save</button>
+
+        @if (session('status') === 'password-updated')
+            <p class="text-sm text-gray-600">Saved.</p>
+        @endif
+    </div>
+</form>
+>>>>>>> crud-user
