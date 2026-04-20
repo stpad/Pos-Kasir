@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,6 +24,9 @@ Route::resource('kasirs', KasirController::class)->middleware(['auth', 'verified
 
 // Route resource untuk kategori (hanya admin)
 Route::resource('kategoris', KategoriController::class)->middleware(['auth', 'verified', 'admin']);
+
+// Route resource untuk produk (hanya admin)
+Route::resource('produks', ProdukController::class)->middleware(['auth', 'verified', 'admin']);
 
 // Profile routes
 Route::middleware('auth')->group(function () {
