@@ -12,9 +12,15 @@
             <!-- Navigation Links (Center) -->
             <div class="hidden sm:flex sm:items-center sm:justify-center flex-1">
                 <div class="flex space-x-8">
+                    <!-- Dashboard Link - ADDED -->
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    
                     <x-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
                         {{ __('Kasir') }}
                     </x-nav-link>
+                    
                     @if(auth()->user()->role === 'admin')
                     <x-nav-link :href="route('kategoris.index')" :active="request()->routeIs('kategoris.*')">
                         {{ __('Kategori') }}
@@ -72,15 +78,24 @@
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
+    <!-- Responsive Navigation Menu (Mobile) -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <!-- Dashboard Link for Mobile - ADDED -->
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
             <x-responsive-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
                 {{ __('Kasir') }}
             </x-responsive-nav-link>
+            
             @if(auth()->user()->role === 'admin')
             <x-responsive-nav-link :href="route('kategoris.index')" :active="request()->routeIs('kategoris.*')">
                 {{ __('Kategori') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('produks.index')" :active="request()->routeIs('produks.*')">
+                {{ __('Produk') }}
             </x-responsive-nav-link>
             @endif
         </div>
