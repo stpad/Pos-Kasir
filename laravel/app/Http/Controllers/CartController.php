@@ -4,70 +4,106 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
-use App\Models\Product;
+use App\Models\Produk;
 
 class CartController extends Controller
 {
-    // Ambil isi keranjang user
-    public function index()
-    {
-        $cartItems = Cart::with('product')
-            ->where('user_id', auth()->id())
-            ->get();
-
-        return response()->json($cartItems);
-    }
-
-    // Tambah produk ke keranjang
     public function addToCart(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        $request->validate([
+            'product_id' => 'required|exists:produks,id',
+            'quantity'   => 'required|integer|min:1',
+        ]);
 
-        // Validasi stok
-        if ($request->quantity > $product->stock) {
-            return response()->json(['error' => 'Stok tidak cukup'], 400);
+        $produk = Produk::findOrFail($request->product_id);
+
+        if ($request->quantity > $produk->stok) {
+            return response()->json(['error' => 'Stok tidak cukup!'], 400);
         }
 
         $cartItem = Cart::where('user_id', auth()->id())
-                        ->where('product_id', $product->id)
-                        ->first();
+            ->where('product_id', $produk->id)
+            ->first();
 
         if ($cartItem) {
-            $cartItem->quantity += $request->quantity;
-            $cartItem->save();
+            $newQty = $cartItem->quantity + $request->quantity;
+            if ($newQty > $produk->stok) {
+                return response()->json(['error' => 'Stok tidak cukup!'], 400);
+            }
+            $cartItem->update(['quantity' => $newQty]);
         } else {
             Cart::create([
-                'user_id' => auth()->id(),
-                'product_id' => $product->id,
-                'quantity' => $request->quantity,
+                'user_id'    => auth()->id(),
+                'product_id' => $produk->id,
+                'quantity'   => $request->quantity,
             ]);
         }
 
-        return response()->json(['success' => 'Produk ditambahkan ke keranjang']);
+        return response()->json([
+            'success' => 'Produk ditambahkan!',
+            'cart'    => $this->getCartData(),
+        ]);
     }
 
-    // Update jumlah produk
     public function updateQuantity(Request $request, $id)
     {
-        $cartItem = Cart::findOrFail($id);
-        $product = Product::findOrFail($cartItem->product_id);
+        $cartItem = Cart::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
-        if ($request->quantity > $product->stock) {
-            return response()->json(['error' => 'Stok tidak cukup'], 400);
+        $produk = Produk::findOrFail($cartItem->product_id);
+
+        if ($request->quantity <= 0) {
+            $cartItem->delete();
+        } else {
+            if ($request->quantity > $produk->stok) {
+                return response()->json(['error' => 'Stok tidak cukup!'], 400);
+            }
+            $cartItem->update(['quantity' => $request->quantity]);
         }
 
-        $cartItem->quantity = $request->quantity;
-        $cartItem->save();
-
-        return response()->json(['success' => 'Jumlah produk diperbarui']);
+        return response()->json([
+            'success' => 'Keranjang diperbarui.',
+            'cart'    => $this->getCartData(),
+        ]);
     }
 
-    // Hapus produk dari keranjang
     public function removeItem($id)
     {
-        $cartItem = Cart::findOrFail($id);
-        $cartItem->delete();
+        Cart::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail()
+            ->delete();
 
-        return response()->json(['success' => 'Produk dihapus dari keranjang']);
+        return response()->json([
+            'success' => 'Produk dihapus.',
+            'cart'    => $this->getCartData(),
+        ]);
+    }
+
+    public function index()
+    {
+        return response()->json($this->getCartData());
+    }
+
+    private function getCartData()
+    {
+        $items = Cart::with('produk')
+            ->where('user_id', auth()->id())
+            ->get()
+            ->map(fn($item) => [
+                'id'       => $item->id,
+                'nama'     => $item->produk->nama,
+                'harga'    => $item->produk->harga,
+                'stok'     => $item->produk->stok,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->produk->harga * $item->quantity,
+            ]);
+
+        return [
+            'items' => $items,
+            'total' => $items->sum('subtotal'),
+            'count' => $items->sum('quantity'),
+        ];
     }
 }

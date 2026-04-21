@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $search = $request->search;
@@ -21,29 +18,24 @@ class ProdukController extends Controller
                           $q->where('nama', 'like', "%{$search}%");
                       });
             })
-            ->get();
+            ->paginate(10);
+
         return view('produks.index', compact('produks', 'search'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $kategoris = Kategori::all();
         return view('produks.create', compact('kategoris'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'deskripsi' => 'nullable|string',
+            'nama'        => 'required|string|max:255',
+            'harga'       => 'required|numeric|min:0',
+            'stok'        => 'required|integer|min:0',
+            'deskripsi'   => 'nullable|string',
             'kategori_id' => 'required|exists:kategoris,id',
         ]);
 
@@ -51,35 +43,26 @@ class ProdukController extends Controller
         return redirect()->route('produks.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $produk = Produk::with('kategori')->findOrFail($id);
         return view('produks.show', compact('produk'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $produk = Produk::findOrFail($id);
+        $produk    = Produk::findOrFail($id);
         $kategoris = Kategori::all();
         return view('produks.edit', compact('produk', 'kategoris'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'deskripsi' => 'nullable|string',
+            'nama'        => 'required|string|max:255',
+            'harga'       => 'required|numeric|min:0',
+            'stok'        => 'required|integer|min:0',
+            'deskripsi'   => 'nullable|string',
             'kategori_id' => 'required|exists:kategoris,id',
         ]);
 
@@ -88,9 +71,6 @@ class ProdukController extends Controller
         return redirect()->route('produks.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $produk = Produk::findOrFail($id);
