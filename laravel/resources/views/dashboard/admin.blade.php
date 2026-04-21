@@ -117,6 +117,49 @@
                 </div>
             </div>
 
+            {{-- Stok Hampir Habis --}}
+            <div class="chart-card" style="margin-top:16px;">
+                <div class="chart-header">
+                    <span class="chart-title">⚠️ Stok Hampir Habis</span>
+                    <a href="{{ route('produks.index') }}" style="font-size:12px; color:#6366f1; text-decoration:none;">Lihat semua →</a>
+                </div>
+                @if(isset($produkStokRendah) && $produkStokRendah->isNotEmpty())
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; padding-bottom:10px; border-bottom:1px solid #f4f4f5;">Produk</th>
+                            <th style="text-align:left; font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; padding-bottom:10px; border-bottom:1px solid #f4f4f5;">Kategori</th>
+                            <th style="text-align:left; font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; padding-bottom:10px; border-bottom:1px solid #f4f4f5;">Stok</th>
+                            <th style="text-align:right; font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; padding-bottom:10px; border-bottom:1px solid #f4f4f5;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($produkStokRendah as $p)
+                        <tr>
+                            <td style="padding:10px 0; border-bottom:1px solid #fafafa; font-size:13px; font-weight:500; color:#111;">{{ $p->nama }}</td>
+                            <td style="padding:10px 0; border-bottom:1px solid #fafafa; font-size:13px; color:#aaa;">{{ $p->kategori->nama ?? '-' }}</td>
+                            <td style="padding:10px 0; border-bottom:1px solid #fafafa;">
+                                @if($p->stok <= 3)
+                                    <span style="background:#fef2f2; color:#dc2626; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:600;">🚨 {{ $p->stok }}</span>
+                                @else
+                                    <span style="background:#fefce8; color:#ca8a04; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:600;">⚠️ {{ $p->stok }}</span>
+                                @endif
+                            </td>
+                            <td style="padding:10px 0; border-bottom:1px solid #fafafa; text-align:right;">
+                                <a href="{{ route('produks.edit', $p) }}" style="font-size:12px; color:#6366f1; text-decoration:none;">Edit →</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @else
+                <div style="text-align:center; padding:32px 0; color:#bbb;">
+                    <div style="font-size:32px; margin-bottom:8px;">✅</div>
+                    <div style="font-size:13px;">Semua stok aman</div>
+                </div>
+                @endif
+            </div>
+
         </div>
     </div>
 
