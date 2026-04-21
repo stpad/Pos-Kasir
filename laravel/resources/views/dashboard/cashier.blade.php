@@ -144,28 +144,7 @@
 
             </div>
 
-            {{-- Quick Actions --}}
-            <div class="section-card anim anim-3">
-                <h3 class="section-title mb-5">⚡ Mulai Transaksi</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <a href="{{ route('produks.index') }}" class="action-card">
-                        <div class="action-icon" style="background:#f0fdf4;">🛒</div>
-                        <div>
-                            <p style="font-size:14px; font-weight:600; color:#0f0f0f;">Buka Halaman Produk</p>
-                            <p style="font-size:12px; color:#9ca3af; margin-top:2px;">Tambah produk ke keranjang</p>
-                        </div>
-                        <span style="margin-left:auto; color:#d1d5db; font-size:18px;">→</span>
-                    </a>
-                    <a href="{{ route('produks.index') }}" class="action-card">
-                        <div class="action-icon" style="background:#faf5ff;">📋</div>
-                        <div>
-                            <p style="font-size:14px; font-weight:600; color:#0f0f0f;">Riwayat Transaksi</p>
-                            <p style="font-size:12px; color:#9ca3af; margin-top:2px;">Lihat transaksi hari ini</p>
-                        </div>
-                        <span style="margin-left:auto; color:#d1d5db; font-size:18px;">→</span>
-                    </a>
-                </div>
-            </div>
+            
 
             {{-- Info placeholder transaksi --}}
             <div class="section-card anim anim-4" style="text-align:center; padding: 48px 28px;">
