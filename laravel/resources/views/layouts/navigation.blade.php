@@ -83,37 +83,29 @@
     <!-- Responsive Navigation Menu (Mobile) -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-<<<<<<< HEAD
-            <!-- Dashboard Link for Mobile - ADDED -->
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+<!-- Responsive Navigation Menu (Mobile) -->
+<div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div class="pt-2 pb-3 space-y-1">
+        <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            {{ __('Dashboard') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('pos.index')" :active="request()->routeIs('pos.*')">
+            {{ __('Kasir POS') }}
+        </x-responsive-nav-link>
+        @if(auth()->user()->role === 'admin')
+        <x-responsive-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
+            {{ __('Kasir') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('kategoris.index')" :active="request()->routeIs('kategoris.*')">
+            {{ __('Kategori') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('produks.index')" :active="request()->routeIs('produks.*')">
+            {{ __('Produk') }}
+        </x-responsive-nav-link>
+        @endif
+    </div>
+    
             
-            <x-responsive-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
-                {{ __('Kasir') }}
-            </x-responsive-nav-link>
-            
-            @if(auth()->user()->role === 'admin')
-=======
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pos.index')" :active="request()->routeIs('pos.*')">
-                {{ __('Kasir POS') }}
-            </x-responsive-nav-link>
-            @if(auth()->user()->role === 'admin')
-            <x-responsive-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
-                {{ __('Kasir') }}
-            </x-responsive-nav-link>
->>>>>>> 236b91a3da2236de7cd624d4a2a0289fe4bfadf0
-            <x-responsive-nav-link :href="route('kategoris.index')" :active="request()->routeIs('kategoris.*')">
-                {{ __('Kategori') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('produks.index')" :active="request()->routeIs('produks.*')">
-                {{ __('Produk') }}
-            </x-responsive-nav-link>
-            @endif
-        </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
