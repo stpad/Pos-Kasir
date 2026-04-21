@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,13 +12,9 @@ Route::get('/', function () {
 });
 
 // Dashboard - redirect based on role
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    if ($user && $user->role === 'admin') {
-        return view('dashboard');
-    }
-    return redirect()->route('kasirs.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Route resource untuk kasir (semua user yang login)
 Route::resource('kasirs', KasirController::class)->middleware(['auth', 'verified']);

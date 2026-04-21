@@ -5,13 +5,22 @@
     <div class="w-min-full px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Kategori</h2>
-            @auth
-                @if(Auth::user() && Auth::user()->role === 'admin')
-                <a href="{{ route('kategoris.create') }}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                    + Tambah Kategori
-                </a>
-                @endif
-            @endauth
+            <div class="flex gap-3">
+                <form action="{{ route('kategoris.index') }}" method="GET" class="flex">
+                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari kategori..." 
+                        class="border border-gray-300 rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    <button type="submit" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-r-md text-sm font-medium">
+                        Cari
+                    </button>
+                </form>
+                @auth
+                    @if(Auth::user() && Auth::user()->role === 'admin')
+                    <a href="{{ route('kategoris.create') }}" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        + Tambah Kategori
+                    </a>
+                    @endif
+                @endauth
+            </div>
         </div>
 
         @if (session('success'))
