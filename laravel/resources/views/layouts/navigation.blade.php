@@ -12,10 +12,18 @@
             <!-- Navigation Links (Center) -->
             <div class="hidden sm:flex sm:items-center sm:justify-center flex-1">
                 <div class="flex space-x-8">
+                    @if(auth()->user()->role === 'cashier')
+                    <x-nav-link :href="route('transaksis.create')" :active="request()->routeIs('transaksis.create')">
+                        {{ __('Transaksi') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('transaksis.index')" :active="request()->routeIs('transaksis.index')">
+                        {{ __('Histori') }}
+                    </x-nav-link>
+                    @endif
+                    @if(auth()->user()->role === 'admin')
                     <x-nav-link :href="route('kasirs.index')" :active="request()->routeIs('kasirs.*')">
                         {{ __('Kasir') }}
                     </x-nav-link>
-                    @if(auth()->user()->role === 'admin')
                     <x-nav-link :href="route('kategoris.index')" :active="request()->routeIs('kategoris.*')">
                         {{ __('Kategori') }}
                     </x-nav-link>

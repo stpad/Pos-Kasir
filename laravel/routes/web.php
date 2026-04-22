@@ -5,6 +5,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,8 +17,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Route resource untuk kasir (semua user yang login)
-Route::resource('kasirs', KasirController::class)->middleware(['auth', 'verified']);
+// Route resource untuk kasir (hanya admin)
+Route::resource('kasirs', KasirController::class)->middleware(['auth', 'verified', 'admin']);
+
+// Route resource untuk transaksi (hanya kasir)
+Route::resource('transaksis', TransaksiController::class)->middleware(['auth', 'verified', 'cashier']);
 
 // Route resource untuk kategori (hanya admin)
 Route::resource('kategoris', KategoriController::class)->middleware(['auth', 'verified', 'admin']);
