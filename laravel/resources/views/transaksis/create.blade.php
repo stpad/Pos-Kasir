@@ -13,17 +13,17 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             
             <!-- Products List -->
             <div class="lg:col-span-2">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
+                <div class="bg-white shadow-sm sm:rounded-lg">
+                    <div class="p-4 flex flex-col">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Pilih Produk</h3>
                         
                         <!-- Search Produk -->
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <input 
                                 type="text" 
                                 id="searchProduk"
@@ -33,18 +33,23 @@
                         </div>
 
                         <!-- Products Grid -->
-                        <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
-                            @foreach(\App\Models\Produk::where('stok', '>', 0)->get() as $produk)
+                        <div id="productsGrid" class="grid grid-cols-3 gap-3 mb-4">
+                            @foreach($produk as $p)
                                 <button 
                                     type="button"
-                                    onclick="addItem({{ $produk->id }}, '{{ $produk->nama }}', {{ $produk->harga }}, {{ $produk->stok }})"
-                                    class="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left"
+                                    onclick="addItem({{ $p->id }}, '{{ $p->nama }}', {{ $p->harga }}, {{ $p->stok }})"
+                                    class="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left text-sm"
                                 >
-                                    <div class="font-medium text-gray-900 truncate">{{ $produk->nama }}</div>
-                                    <div class="text-sm text-gray-500">Stok: {{ $produk->stok }}</div>
-                                    <div class="text-lg font-bold text-blue-600 mt-1">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                                    <div class="font-medium text-gray-900 truncate">{{ $p->nama }}</div>
+                                    <div class="text-sm text-gray-500">Stok: {{ $p->stok }}</div>
+                                    <div class="text-lg font-bold text-blue-600 mt-1">Rp {{ number_format($p->harga, 0, ',', '.') }}</div>
                                 </button>
                             @endforeach
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="flex justify-center">
+                            {{ $produk->links() }}
                         </div>
                     </div>
                 </div>
@@ -52,41 +57,41 @@
 
             <!-- Cart -->
             <div class="lg:col-span-1">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg sticky top-6">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Keranjang</h3>
+                <div class="bg-white shadow-sm sm:rounded-lg sticky top-6">
+                    <div class="p-4 flex flex-col">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Keranjang</h3>
                         
                         <form id="transaksiForm" method="POST" action="{{ route('transaksis.store') }}">
                             @csrf
                             <div id="hiddenInputs"></div>
-                            <div id="cartItems" class="space-y-3 mb-4 max-h-64 overflow-y-auto">
+                            <div id="cartItems" class="max-h-64 overflow-y-auto space-y-2 mb-3">
                                 <p class="text-gray-500 text-sm text-center py-4">Belum ada produk dipilih</p>
                             </div>
 
                             <!-- Total -->
-                            <div class="border-t pt-4 mb-4">
-                                <div class="flex justify-between text-lg font-bold">
+                            <div class="border-t pt-3 mb-3">
+                                <div class="flex justify-between text-base font-bold">
                                     <span>Total:</span>
                                     <span id="totalHarga">Rp 0</span>
                                 </div>
                             </div>
 
                             <!-- Pembayaran -->
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Bayar</label>
+                            <div class="mb-3">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Bayar</label>
                                 <input 
                                     type="number" 
                                     name="jumlah_bayar" 
                                     id="jumlahBayar"
                                     min="0"
-                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2"
+                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2 text-sm"
                                     oninput="hitungKembalian()"
                                 >
                             </div>
 
                             <!-- Kembalian -->
-                            <div class="mb-6">
-                                <div class="flex justify-between text-lg font-bold">
+                            <div class="mb-4">
+                                <div class="flex justify-between text-base font-bold">
                                     <span>Kembalian:</span>
                                     <span id="kembalian" class="text-green-600">Rp 0</span>
                                 </div>
@@ -96,7 +101,7 @@
                                 type="submit"
                                 id="btnSimpan"
                                 disabled
-                                class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition"
+                                class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition text-sm"
                             >
                                 Simpan Transaksi
                             </button>
@@ -111,6 +116,7 @@
 <script>
 let cart = [];
 let stokProduk = {}; // Simpan stok untuk setiap produk
+document.getElementById('jumlahBayar').focus();
 
 function addItem(id, nama, harga, stok) {
     stokProduk[id] = stok; // Simpan stok produk
@@ -175,18 +181,18 @@ function renderCart() {
                        <input type="hidden" name="items[${item.id}][jumlah]" value="${item.jumlah}">`;
         
         return `
-            <div class="p-3 bg-gray-50 rounded-lg ${stokTidakCukup ? 'border-2 border-red-500' : ''}">
-                <div class="flex justify-between items-center">
-                    <div class="flex-1">
-                        <div class="font-medium text-gray-900">${item.nama}</div>
-                        <div class="text-sm text-gray-500">Rp ${item.harga.toLocaleString('id-ID')} x ${item.jumlah}</div>
-                        ${stokTidakCukup ? '<div class="text-sm text-red-600 font-semibold mt-1">⚠️ Stok hanya tersedia: ' + stokProduk[item.id] + '</div>' : ''}
+            <div class="p-2 bg-gray-50 rounded ${stokTidakCukup ? 'border-2 border-red-500' : ''}">
+                <div class="flex justify-between items-start gap-2">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-medium text-gray-900 text-xs truncate">${item.nama}</div>
+                        <div class="text-xs text-gray-500">Rp ${item.harga.toLocaleString('id-ID')} x ${item.jumlah}</div>
+                        ${stokTidakCukup ? '<div class="text-xs text-red-600 font-semibold mt-0.5">⚠️ Stok: ' + stokProduk[item.id] + '</div>' : ''}
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="updateJumlah(${item.id}, -1)" class="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300">-</button>
-                        <span class="w-8 text-center">${item.jumlah}</span>
-                        <button type="button" onclick="updateJumlah(${item.id}, 1)" class="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300 ${item.jumlah >= stokProduk[item.id] ? 'opacity-50 cursor-not-allowed' : ''}">+</button>
-                        <button type="button" onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 ml-2">✕</button>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="updateJumlah(${item.id}, -1)" class="w-5 h-5 text-xs rounded bg-gray-200 hover:bg-gray-300">−</button>
+                        <span class="w-5 text-center text-xs">${item.jumlah}</span>
+                        <button type="button" onclick="updateJumlah(${item.id}, 1)" class="w-5 h-5 text-xs rounded bg-gray-200 hover:bg-gray-300 ${item.jumlah >= stokProduk[item.id] ? 'opacity-50 cursor-not-allowed' : ''}">+</button>
+                        <button type="button" onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 text-xs ml-1">✕</button>
                     </div>
                 </div>
             </div>

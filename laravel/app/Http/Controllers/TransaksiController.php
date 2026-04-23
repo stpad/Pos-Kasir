@@ -31,9 +31,12 @@ class TransaksiController extends Controller
     /**
      * Show the form for creating new transaction.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('transaksis.create');
+        $produk = \App\Models\Produk::where('stok', '>', 0)
+            ->paginate(20);
+        
+        return view('transaksis.create', compact('produk'));
     }
 
     /**
