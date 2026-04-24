@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->decimal('harga', 10, 2);
+            $table->decimal('harga_beli', 10, 2)->nullable();
+            $table->decimal('diskon', 5, 2)->default(0);
+            $table->string('gambar')->nullable();
             $table->integer('stok')->default(0);
             $table->text('deskripsi')->nullable();
             $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');

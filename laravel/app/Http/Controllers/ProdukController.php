@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -21,7 +22,7 @@ class ProdukController extends Controller
                           $q->where('nama', 'like', "%{$search}%");
                       });
             })
-            ->get();
+            ->paginate(12);
         return view('produks.index', compact('produks', 'search'));
     }
 
@@ -40,14 +41,25 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'deskripsi' => 'nullable|string',
+            'nama'        => 'required|string|max:255',
+            'harga'       => 'required|numeric|min:0',
+            'harga_beli'  => 'nullable|numeric|min:0',
+            'diskon'      => 'nullable|numeric|min:0|max:100',
+            'stok'        => 'required|integer|min:0',
+            'deskripsi'   => 'nullable|string',
+            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'kategori_id' => 'required|exists:kategoris,id',
         ]);
 
-        Produk::create($request->all());
+        $data = $request->all();
+
+        // Handle gambar upload
+        if ($request->hasFile('gambar')) {
+            $path = $request->file('gambar')->store('produks', 'public');
+            $data['gambar'] = $path;
+        }
+
+        Produk::create($data);
         return redirect()->route('produks.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
@@ -76,15 +88,30 @@ class ProdukController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'deskripsi' => 'nullable|string',
+            'nama'        => 'required|string|max:255',
+            'harga'       => 'required|numeric|min:0',
+            'harga_beli'  => 'nullable|numeric|min:0',
+            'diskon'      => 'nullable|numeric|min:0|max:100',
+            'stok'        => 'required|integer|min:0',
+            'deskripsi'   => 'nullable|string',
+            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'kategori_id' => 'required|exists:kategoris,id',
         ]);
 
         $produk = Produk::findOrFail($id);
-        $produk->update($request->all());
+        $data = $request->all();
+
+        // Handle gambar upload
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if ($produk->gambar) {
+                Storage::disk('public')->delete($produk->gambar);
+            }
+            $path = $request->file('gambar')->store('produks', 'public');
+            $data['gambar'] = $path;
+        }
+
+        $produk->update($data);
         return redirect()->route('produks.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
@@ -94,6 +121,12 @@ class ProdukController extends Controller
     public function destroy(string $id)
     {
         $produk = Produk::findOrFail($id);
+        
+        // Hapus gambar jika ada
+        if ($produk->gambar) {
+            Storage::disk('public')->delete($produk->gambar);
+        }
+        
         $produk->delete();
         return redirect()->route('produks.index')->with('success', 'Produk berhasil dihapus.');
     }
