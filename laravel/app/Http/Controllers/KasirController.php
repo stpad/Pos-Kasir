@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Transaksi;
+use App\Models\DetailTransaksi;
+use Carbon\Carbon;
 
 class KasirController extends Controller
 {
@@ -20,6 +23,7 @@ class KasirController extends Controller
             ->latest()
             ->paginate(10);
         return view('kasirs.index', compact('kasirs', 'search'));
+        
     }
 
     /**

@@ -21,7 +21,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::resource('kasirs', KasirController::class)->middleware(['auth', 'verified', 'admin']);
 
 // Route resource untuk transaksi (hanya kasir)
-Route::resource('transaksis', TransaksiController::class)->middleware(['auth', 'verified', 'cashier']);
+Route::resource('transaksis', TransaksiController::class)
+    ->middleware(['auth', 'verified']);
 
 // Route resource untuk kategori (hanya admin)
 Route::resource('kategoris', KategoriController::class)->middleware(['auth', 'verified', 'admin']);
